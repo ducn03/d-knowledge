@@ -1,0 +1,12 @@
+{
+  "intro": "intro.md",
+  "java": {
+    "core": {
+      "oop": "java/core/oop.md",
+      "thread": "java/core/thread.md"
+    },
+    "advanced": {
+      "stream": "java/advanced/stream.md"
+    }
+  }
+}

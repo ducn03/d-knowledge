@@ -9,7 +9,8 @@
             "Java": {
                 "Core":{
                     "Java cơ bản": "/information-technology/language/java/core/java-basic/java-basic.md",
-                    "Kiểu dữ liệu": "/information-technology/language/java/core/java-basic/type.md"
+                    "Kiểu dữ liệu": "/information-technology/language/java/core/java-basic/type.md",
+                    "Comment": "/information-technology/language/java/core/java-basic/comment.md"
                 }
             }
         }

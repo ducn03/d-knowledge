@@ -1,4 +1,4 @@
-# 📘 Kiểu dữ liệu trong Java - Hướng dẫn Đầy đủ
+# 📘 Kiểu dữ liệu trong Java
 
 Java có **2 nhóm kiểu dữ liệu chính**:
 - **Kiểu dữ liệu nguyên thủy (Primitive Type)**

@@ -447,17 +447,17 @@
   let structureData = {};
 
   // Load structure.json with basePath
-  fetch(new URL('structure_vi.json', window.location.origin + basePath))
+    fetch(basePath + 'structure_vi.json')
     .then(res => res.json())
     .then(data => {
-      structureData = data; 
-      const menu = buildMenu(data);
-      menu.classList.add("submenu", "open");
-      menuDiv.appendChild(menu);
+        structureData = data; 
+        const menu = buildMenu(data);
+        menu.classList.add("submenu", "open");
+        menuDiv.appendChild(menu);
 
-      const path = getQueryParam('path') || 'intro.md';
-      loadMarkdown(path);
-      activateMenuItem(path);
+        const path = getQueryParam('path') || 'intro.md';
+        loadMarkdown(path);
+        activateMenuItem(path);
     });
 
   function buildMenu(obj) {
@@ -513,15 +513,15 @@
   }
 
   function loadMarkdown(path) {
-    fetch(new URL(path, window.location.origin + basePath))
-      .then(res => res.text())
-      .then(md => {
+    fetch(basePath + path)
+        .then(res => res.text())
+        .then(md => {
         contentDiv.innerHTML = marked.parse(md);
         hljs.highlightAll();
         addCopyButtons();
-      })
-      .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
-  }
+        })
+        .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
+    }
 
   function addCopyButtons() {
     const codeBlocks = document.querySelectorAll('pre');

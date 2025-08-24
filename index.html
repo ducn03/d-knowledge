@@ -119,6 +119,8 @@
       gap: 2px;
       color: #374151;
       font-size: 0.95rem;
+      width: 100%;
+      box-sizing: border-box;
     }
     body.dark .menu li { color: #e5e7eb; }
     .menu li:hover {
@@ -136,6 +138,54 @@
     body.dark .menu li.active {
       background: linear-gradient(to right, #4b5563, #374151);
       color: #34d399;
+    }
+
+    .menu li .tooltip {
+      position: relative;
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+    }
+
+    .menu li .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1001;
+      top: 50%;
+      left: 110%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .menu li .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    body.dark .menu li .tooltip .tooltiptext {
+      background-color: #777;
+      color: #e5e7eb;
+    }
+
+    .menu li .header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
     }
 
     .submenu {
@@ -183,7 +233,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    /* Laptop/Desktop sidebar */
     @media (min-width: 1024px) {
       body { overflow: hidden; }
       .sidebar { position: relative; transform: translateX(0); transition: margin-left 0.4s ease-in-out; }
@@ -200,7 +249,6 @@
       }
     }
 
-    /* Mobile optimization */
     @media (max-width: 1023px) {
       .content { padding: 10px; }
       .markdown-body {
@@ -216,7 +264,6 @@
       }
     }
 
-    /* Markdown Styling */
     .markdown-body {
       font-size: 16px;
       color: #111827;
@@ -388,21 +435,16 @@
   const contentDiv = document.getElementById('content');
   const highlightTheme = document.getElementById('highlight-theme');
 
-  // Hàm build URL cho fetch (chạy được cả local lẫn GitHub Pages)
   function getFileUrl(path) {
-    // Loại bỏ dấu / ở đầu nếu có để đảm bảo đường dẫn tương đối
     const cleanPath = path.replace(/^\/+/, '');
     if (location.protocol === 'file:') {
-      // Local: trả về đường dẫn tương đối từ thư mục gốc
       return cleanPath;
     } else {
-      // GitHub Pages: thêm basePath (thư mục chứa index.html)
       const basePath = window.location.pathname.replace(/\/[^\/]*$/, '');
       return `${basePath}/${cleanPath}`;
     }
   }
 
-  // Toggle sidebar
   toggleBtn.addEventListener('click', () => {
     if (window.innerWidth < 1024) {
       sidebar.classList.toggle('show');
@@ -411,7 +453,6 @@
     }
   });
 
-  // Toggle dark/light mode
   modeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark');
     modeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
@@ -421,14 +462,12 @@
     localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
   });
 
-  // Load saved theme
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark');
     modeToggle.textContent = '☀️';
     highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css';
   }
 
-  // Query param helper
   function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
@@ -439,7 +478,6 @@
     window.history.pushState({}, '', url);
   }
 
-  // Activate menu item
   function activateMenuItem(path) {
     document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
     const target = Array.from(document.querySelectorAll('.menu li'))
@@ -457,7 +495,6 @@
 
   let structureData = {};
 
-  // Load structure.json (universal)
   fetch(getFileUrl('structure_vi.json'))
     .then(res => {
       if (!res.ok) throw new Error(`Không tải được structure_vi.json: ${res.statusText}`);
@@ -484,7 +521,16 @@
       const li = document.createElement('li');
 
       if (typeof obj[key] === 'string') {
-        li.textContent = key;
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = key;
+
+        const tooltipText = document.createElement('span');
+        tooltipText.className = 'tooltiptext';
+        tooltipText.textContent = key;
+        tooltip.appendChild(tooltipText);
+
+        li.appendChild(tooltip);
         li.dataset.path = obj[key];
         li.addEventListener('click', () => {
           document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
@@ -498,14 +544,19 @@
         arrow.textContent = '▸';
         arrow.className = 'arrow';
 
-        const span = document.createElement('span');
-        span.textContent = key;
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = key;
+
+        const tooltipText = document.createElement('span');
+        tooltipText.className = 'tooltiptext';
+        tooltipText.textContent = key;
+        tooltip.appendChild(tooltipText);
 
         const header = document.createElement('div');
-        header.style.display = 'flex';
-        header.style.alignItems = 'center';
+        header.className = 'header';
         header.appendChild(arrow);
-        header.appendChild(span);
+        header.appendChild(tooltip);
         li.appendChild(header);
 
         const subMenu = buildMenu(obj[key]);
@@ -530,7 +581,6 @@
     return ul;
   }
 
-  // Load markdown (universal)
   function loadMarkdown(path) {
     fetch(getFileUrl(path))
       .then(res => {

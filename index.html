@@ -388,18 +388,17 @@
   const contentDiv = document.getElementById('content');
   const highlightTheme = document.getElementById('highlight-theme');
 
-  // BasePath (GitHub Pages sẽ có repo-name/, local thì trống)
-  const basePath = window.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') + '/';
-
   // Hàm build URL cho fetch (chạy được cả local lẫn GitHub Pages)
   function getFileUrl(path) {
-    if (location.protocol === "file:") {
-        // Local: luôn trả về đường dẫn tương đối (tránh thêm "/")
-        return path;
+    // Loại bỏ dấu / ở đầu nếu có để đảm bảo đường dẫn tương đối
+    const cleanPath = path.replace(/^\/+/, '');
+    if (location.protocol === 'file:') {
+      // Local: trả về đường dẫn tương đối từ thư mục gốc
+      return cleanPath;
     } else {
-        // Online (GitHub Pages): ghép basePath
-        const basePath = window.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '');
-        return basePath + "/" + path;
+      // GitHub Pages: thêm basePath (thư mục chứa index.html)
+      const basePath = window.location.pathname.replace(/\/[^\/]*$/, '');
+      return `${basePath}/${cleanPath}`;
     }
   }
 
@@ -450,7 +449,7 @@
       let parent = target.parentNode;
       while (parent && parent.classList.contains('submenu')) {
         parent.classList.add('open');
-        parent.previousElementSibling.querySelector('.arrow').textContent = "▾";
+        parent.previousElementSibling.querySelector('.arrow').textContent = '▾';
         parent = parent.parentNode.closest('.submenu');
       }
     }
@@ -460,16 +459,23 @@
 
   // Load structure.json (universal)
   fetch(getFileUrl('structure_vi.json'))
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`Không tải được structure_vi.json: ${res.statusText}`);
+      return res.json();
+    })
     .then(data => {
-      structureData = data; 
+      structureData = data;
       const menu = buildMenu(data);
-      menu.classList.add("submenu", "open");
+      menu.classList.add('submenu', 'open');
       menuDiv.appendChild(menu);
 
       const path = getQueryParam('path') || 'intro.md';
       loadMarkdown(path);
       activateMenuItem(path);
+    })
+    .catch(err => {
+      console.error('Lỗi khi tải structure_vi.json:', err);
+      contentDiv.innerHTML = `<p style="color:red">Lỗi tải cấu trúc menu: ${err.message}</p>`;
     });
 
   function buildMenu(obj) {
@@ -489,8 +495,8 @@
         });
       } else {
         const arrow = document.createElement('span');
-        arrow.textContent = "▸";
-        arrow.className = "arrow";
+        arrow.textContent = '▸';
+        arrow.className = 'arrow';
 
         const span = document.createElement('span');
         span.textContent = key;
@@ -503,7 +509,7 @@
         li.appendChild(header);
 
         const subMenu = buildMenu(obj[key]);
-        subMenu.classList.add("submenu");
+        subMenu.classList.add('submenu');
         li.appendChild(subMenu);
 
         header.addEventListener('click', (e) => {
@@ -511,11 +517,11 @@
           siblingSubmenus.forEach(sub => {
             if (sub !== subMenu) {
               sub.classList.remove('open');
-              sub.previousElementSibling.querySelector('.arrow').textContent = "▸";
+              sub.previousElementSibling.querySelector('.arrow').textContent = '▸';
             }
           });
           subMenu.classList.toggle('open');
-          arrow.textContent = subMenu.classList.contains('open') ? "▾" : "▸";
+          arrow.textContent = subMenu.classList.contains('open') ? '▾' : '▸';
           e.stopPropagation();
         });
       }
@@ -527,13 +533,19 @@
   // Load markdown (universal)
   function loadMarkdown(path) {
     fetch(getFileUrl(path))
-      .then(res => res.text())
+      .then(res => {
+        if (!res.ok) throw new Error(`Không tìm thấy file: ${path}`);
+        return res.text();
+      })
       .then(md => {
         contentDiv.innerHTML = marked.parse(md);
         hljs.highlightAll();
         addCopyButtons();
       })
-      .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
+      .catch(err => {
+        console.error('Lỗi khi tải Markdown:', err);
+        contentDiv.innerHTML = `<p style="color:red">${err.message}</p>`;
+      });
   }
 
   function addCopyButtons() {
@@ -557,6 +569,5 @@
     });
   }
 </script>
-
 </body>
 </html>

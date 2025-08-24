@@ -19,7 +19,9 @@
                       "Accessing and Modifying Fields": "/information-technology/language/java/core/java-basic/accessing-and-modifying-fields.md"
                     },
                     "2. Quản lý bộ nhớ & đối tượng": {
-                      "Stack and Heap": "/information-technology/language/java/core/java-memory/stack-and-heap.md"
+                      "Stack and Heap": "/information-technology/language/java/core/java-memory/stack-and-heap.md",
+                      "Object Life-Cycle in Java": "/information-technology/language/java/core/java-memory/life-cycle-in-java.md",
+                      "Garbage Collection": "/information-technology/language/java/core/java-memory/garbage-collection.md"
                     }
                 }
             }

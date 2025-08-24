@@ -44,12 +44,12 @@
     }
 
     .sidebar-header {
-      padding: 20px;
+      padding: 15px;
       text-align: center;
       background: linear-gradient(135deg, #10b981, #34d399);
       color: white;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       letter-spacing: 0.5px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
@@ -100,43 +100,61 @@
 
     .menu {
       flex: 1;
-      padding: 15px 10px;
+      padding: 10px 5px;
     }
-    .menu ul { list-style: none; padding-left: 10px; margin: 0; }
+    .menu ul {
+      list-style: none;
+      padding-left: 5px;
+      margin: 0;
+    }
     .menu li {
       cursor: pointer;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
       transition: all 0.25s ease;
       user-select: none;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 4px;
+      gap: 2px;
       color: #374151;
+      font-size: 0.95rem;
     }
     body.dark .menu li { color: #e5e7eb; }
-    .menu li:hover { background: #f0fdf4; transform: translateX(6px); }
+    .menu li:hover {
+      background: #f0fdf4;
+      transform: translateX(4px);
+    }
     body.dark .menu li:hover { background: #4b5563; }
     .menu li.active {
       background: linear-gradient(to right, #dcfce7, #ffffff);
       color: #059669;
       font-weight: 600;
-      border-left: 4px solid #10b981;
-      padding-left: 10px;
+      border-left: 3px solid #10b981;
+      padding-left: 7px;
     }
     body.dark .menu li.active {
       background: linear-gradient(to right, #4b5563, #374151);
       color: #34d399;
     }
 
-    .submenu { display: none; padding-left: 20px; }
-    .submenu.open { display: block; animation: fadeSlide 0.35s ease; }
+    .submenu {
+      display: none;
+      padding-left: 10px;
+    }
+    .submenu.open {
+      display: block;
+      animation: fadeSlide 0.3s ease;
+    }
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .arrow { font-size: 0.8rem; color: #666; margin-right: 6px; }
+    .arrow {
+      font-size: 0.75rem;
+      color: #666;
+      margin-right: 4px;
+    }
     body.dark .arrow { color: #9ca3af; }
 
     .content {
@@ -363,123 +381,172 @@
   </div>
 
   <script>
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggleBtn');
-    const modeToggle = document.getElementById('modeToggle');
-    const menuDiv = document.getElementById('menu');
-    const contentDiv = document.getElementById('content');
-    const highlightTheme = document.getElementById('highlight-theme');
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const modeToggle = document.getElementById('modeToggle');
+  const menuDiv = document.getElementById('menu');
+  const contentDiv = document.getElementById('content');
+  const highlightTheme = document.getElementById('highlight-theme');
 
-    // Toggle sidebar
-    toggleBtn.addEventListener('click', () => {
-      if (window.innerWidth < 1024) {
-        sidebar.classList.toggle('show');
+  // Toggle sidebar
+  toggleBtn.addEventListener('click', () => {
+    if (window.innerWidth < 1024) {
+      sidebar.classList.toggle('show');
+    } else {
+      sidebar.classList.toggle('hidden');
+    }
+  });
+
+  // Toggle dark/light mode
+  modeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    modeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    highlightTheme.href = document.body.classList.contains('dark')
+      ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css'
+      : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  // Load saved theme
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    modeToggle.textContent = '☀️';
+    highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css';
+  }
+
+  // Get query parameter from URL
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Set query parameter in URL
+  function setQueryParam(param, value) {
+    const url = new URL(window.location);
+    url.searchParams.set(param, value);
+    window.history.pushState({}, '', url);
+  }
+
+  // Find and activate menu item based on path
+  function activateMenuItem(path) {
+    document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
+
+    const target = Array.from(document.querySelectorAll('.menu li'))
+      .find(item => item.dataset.path === path);
+
+    if (target) {
+      target.classList.add('active');
+      // mở submenu cha
+      let parent = target.parentNode;
+      while (parent && parent.classList.contains('submenu')) {
+        parent.classList.add('open');
+        parent.previousElementSibling.querySelector('.arrow').textContent = "▾";
+        parent = parent.parentNode.closest('.submenu');
+      }
+    }
+  }
+
+  let structureData = {};
+
+  fetch('structure_vi.json')
+    .then(res => res.json())
+    .then(data => {
+      structureData = data; 
+      const menu = buildMenu(data);
+      menu.classList.add("submenu", "open");
+      menuDiv.appendChild(menu);
+
+      // Load Markdown based on URL query parameter or default to intro.md
+      const path = getQueryParam('path') || 'intro.md';
+      loadMarkdown(path);
+      activateMenuItem(path);
+    });
+
+  function buildMenu(obj) {
+    const ul = document.createElement('ul');
+    for (const key in obj) {
+      const li = document.createElement('li');
+
+      if (typeof obj[key] === 'string') {
+        li.textContent = key;
+        li.dataset.path = obj[key]; // gắn path để map
+        li.addEventListener('click', () => {
+          document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
+          li.classList.add('active');
+          loadMarkdown(obj[key]);
+          setQueryParam('path', obj[key]);
+          if (window.innerWidth < 1024) sidebar.classList.remove('show');
+        });
       } else {
-        sidebar.classList.toggle('hidden');
+        const arrow = document.createElement('span');
+        arrow.textContent = "▸";
+        arrow.className = "arrow";
+
+        const span = document.createElement('span');
+        span.textContent = key;
+
+        const header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.alignItems = 'center';
+        header.appendChild(arrow);
+        header.appendChild(span);
+        li.appendChild(header);
+
+        const subMenu = buildMenu(obj[key]);
+        subMenu.classList.add("submenu");
+        li.appendChild(subMenu);
+
+        header.addEventListener('click', (e) => {
+          const siblingSubmenus = li.parentNode.querySelectorAll('.submenu.open');
+          siblingSubmenus.forEach(sub => {
+            if (sub !== subMenu) {
+              sub.classList.remove('open');
+              sub.previousElementSibling.querySelector('.arrow').textContent = "▸";
+            }
+          });
+          subMenu.classList.toggle('open');
+          arrow.textContent = subMenu.classList.contains('open') ? "▾" : "▸";
+          e.stopPropagation();
+        });
       }
-    });
-
-    // Toggle dark/light mode
-    modeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      modeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-      highlightTheme.href = document.body.classList.contains('dark')
-        ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css'
-        : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    });
-
-    // Load saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      modeToggle.textContent = '☀️';
-      highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css';
+      ul.appendChild(li);
     }
+    return ul;
+  }
 
-    fetch('structure.json')
-      .then(res => res.json())
-      .then(data => {
-        const menu = buildMenu(data);
-        menu.classList.add("submenu", "open");
-        menuDiv.appendChild(menu);
-        loadMarkdown('intro.md');
-      });
+  function loadMarkdown(path) {
+    fetch(path)
+      .then(res => res.text())
+      .then(md => {
+        contentDiv.innerHTML = marked.parse(md);
+        hljs.highlightAll();
+        addCopyButtons();
+      })
+      .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
+  }
 
-    function buildMenu(obj) {
-      const ul = document.createElement('ul');
-      for (const key in obj) {
-        const li = document.createElement('li');
+  function addCopyButtons() {
+    const codeBlocks = document.querySelectorAll('pre');
+    codeBlocks.forEach((block, index) => {
+      const copyButton = document.createElement('button');
+      copyButton.textContent = 'Copy';
+      copyButton.className = 'copy-button';
+      block.appendChild(copyButton);
 
-        if (typeof obj[key] === 'string') {
-          li.textContent = key;
-          li.addEventListener('click', () => {
-            document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
-            li.classList.add('active');
-            loadMarkdown(obj[key]);
-            if (window.innerWidth < 1024) sidebar.classList.remove('show');
-          });
-        } else {
-          const arrow = document.createElement('span');
-          arrow.textContent = "▸";
-          arrow.className = "arrow";
-
-          const span = document.createElement('span');
-          span.textContent = key;
-
-          const header = document.createElement('div');
-          header.style.display = 'flex';
-          header.style.alignItems = 'center';
-          header.appendChild(arrow);
-          header.appendChild(span);
-          li.appendChild(header);
-
-          const subMenu = buildMenu(obj[key]);
-          subMenu.classList.add("submenu");
-          li.appendChild(subMenu);
-
-          header.addEventListener('click', (e) => {
-            subMenu.classList.toggle('open');
-            arrow.textContent = subMenu.classList.contains('open') ? "▾" : "▸";
-            e.stopPropagation();
-          });
-        }
-        ul.appendChild(li);
-      }
-      return ul;
-    }
-
-    function loadMarkdown(path) {
-      fetch(path)
-        .then(res => res.text())
-        .then(md => {
-          contentDiv.innerHTML = marked.parse(md);
-          hljs.highlightAll();
-          addCopyButtons();
-        })
-        .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
-    }
-
-    function addCopyButtons() {
-      const codeBlocks = document.querySelectorAll('pre');
-      codeBlocks.forEach((block, index) => {
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copy';
-        copyButton.className = 'copy-button';
-        block.appendChild(copyButton);
-
-        copyButton.addEventListener('click', () => {
-          const code = block.querySelector('code').textContent;
-          navigator.clipboard.writeText(code).then(() => {
-            copyButton.textContent = 'Copied!';
-            setTimeout(() => {
-              copyButton.textContent = 'Copy';
-            }, 2000);
-          }).catch(err => {
-            console.error('Copy failed:', err);
-          });
+      copyButton.addEventListener('click', () => {
+        const code = block.querySelector('code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          copyButton.textContent = 'Copied!';
+          setTimeout(() => {
+            copyButton.textContent = 'Copy';
+          }, 2000);
+        }).catch(err => {
+          console.error('Copy failed:', err);
         });
       });
-    }
-  </script>
+    });
+  }
+</script>
+
 </body>
 </html>

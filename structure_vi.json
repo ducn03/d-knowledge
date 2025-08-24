@@ -1,0 +1,18 @@
+{
+  "Giới thiệu": "intro.md",
+  "Công nghệ thông tin": {
+    "Kỹ sư phần mềm": {
+        "Backend": {
+
+        },
+        "Ngôn ngữ": {
+            "Java": {
+                "Core":{
+                    "Java cơ bản": "/information-technology/language/java/core/java-basic/java-basic.md",
+                    "Kiểu dữ liệu": "/information-technology/language/java/core/java-basic/type.md"
+                }
+            }
+        }
+    }
+  }
+}

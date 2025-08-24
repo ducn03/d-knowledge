@@ -388,8 +388,16 @@
   const contentDiv = document.getElementById('content');
   const highlightTheme = document.getElementById('highlight-theme');
 
-  // Detect basePath for GitHub Pages
+  // BasePath (GitHub Pages sẽ có repo-name/, local thì trống)
   const basePath = window.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') + '/';
+
+  // Hàm build URL cho fetch (chạy được cả local lẫn GitHub Pages)
+  function getFileUrl(path) {
+    if (location.protocol === "file:") {
+      return path; // Local: relative path
+    }
+    return basePath + path; // Online: absolute path theo repo
+  }
 
   // Toggle sidebar
   toggleBtn.addEventListener('click', () => {
@@ -446,18 +454,18 @@
 
   let structureData = {};
 
-  // Load structure.json with basePath
-    fetch(basePath + 'structure_vi.json')
+  // Load structure.json (universal)
+  fetch(getFileUrl('structure_vi.json'))
     .then(res => res.json())
     .then(data => {
-        structureData = data; 
-        const menu = buildMenu(data);
-        menu.classList.add("submenu", "open");
-        menuDiv.appendChild(menu);
+      structureData = data; 
+      const menu = buildMenu(data);
+      menu.classList.add("submenu", "open");
+      menuDiv.appendChild(menu);
 
-        const path = getQueryParam('path') || 'intro.md';
-        loadMarkdown(path);
-        activateMenuItem(path);
+      const path = getQueryParam('path') || 'intro.md';
+      loadMarkdown(path);
+      activateMenuItem(path);
     });
 
   function buildMenu(obj) {
@@ -512,21 +520,22 @@
     return ul;
   }
 
+  // Load markdown (universal)
   function loadMarkdown(path) {
-    fetch(basePath + path)
-        .then(res => res.text())
-        .then(md => {
+    fetch(getFileUrl(path))
+      .then(res => res.text())
+      .then(md => {
         contentDiv.innerHTML = marked.parse(md);
         hljs.highlightAll();
         addCopyButtons();
-        })
-        .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
-    }
+      })
+      .catch(() => contentDiv.innerHTML = `<p style="color:red">Không tìm thấy file: ${path}</p>`);
+  }
 
   function addCopyButtons() {
     const codeBlocks = document.querySelectorAll('pre');
     codeBlocks.forEach((block) => {
-      if (block.querySelector('.copy-button')) return; // tránh thêm nút trùng
+      if (block.querySelector('.copy-button')) return;
       const copyButton = document.createElement('button');
       copyButton.textContent = 'Copy';
       copyButton.className = 'copy-button';
@@ -536,9 +545,7 @@
         const code = block.querySelector('code').textContent;
         navigator.clipboard.writeText(code).then(() => {
           copyButton.textContent = 'Copied!';
-          setTimeout(() => {
-            copyButton.textContent = 'Copy';
-          }, 2000);
+          setTimeout(() => { copyButton.textContent = 'Copy'; }, 2000);
         }).catch(err => {
           console.error('Copy failed:', err);
         });
@@ -546,7 +553,6 @@
     });
   }
 </script>
-
 
 </body>
 </html>

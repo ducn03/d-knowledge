@@ -388,6 +388,9 @@
   const contentDiv = document.getElementById('content');
   const highlightTheme = document.getElementById('highlight-theme');
 
+  // Detect basePath for GitHub Pages
+  const basePath = window.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') + '/';
+
   // Toggle sidebar
   toggleBtn.addEventListener('click', () => {
     if (window.innerWidth < 1024) {
@@ -414,29 +417,24 @@
     highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css';
   }
 
-  // Get query parameter from URL
+  // Query param helper
   function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
   }
-
-  // Set query parameter in URL
   function setQueryParam(param, value) {
     const url = new URL(window.location);
     url.searchParams.set(param, value);
     window.history.pushState({}, '', url);
   }
 
-  // Find and activate menu item based on path
+  // Activate menu item
   function activateMenuItem(path) {
     document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
-
     const target = Array.from(document.querySelectorAll('.menu li'))
       .find(item => item.dataset.path === path);
-
     if (target) {
       target.classList.add('active');
-      // mở submenu cha
       let parent = target.parentNode;
       while (parent && parent.classList.contains('submenu')) {
         parent.classList.add('open');
@@ -448,7 +446,8 @@
 
   let structureData = {};
 
-  fetch('structure_vi.json')
+  // Load structure.json with basePath
+  fetch(new URL('structure_vi.json', window.location.origin + basePath))
     .then(res => res.json())
     .then(data => {
       structureData = data; 
@@ -456,7 +455,6 @@
       menu.classList.add("submenu", "open");
       menuDiv.appendChild(menu);
 
-      // Load Markdown based on URL query parameter or default to intro.md
       const path = getQueryParam('path') || 'intro.md';
       loadMarkdown(path);
       activateMenuItem(path);
@@ -469,7 +467,7 @@
 
       if (typeof obj[key] === 'string') {
         li.textContent = key;
-        li.dataset.path = obj[key]; // gắn path để map
+        li.dataset.path = obj[key];
         li.addEventListener('click', () => {
           document.querySelectorAll('.menu li').forEach(el => el.classList.remove('active'));
           li.classList.add('active');
@@ -515,7 +513,7 @@
   }
 
   function loadMarkdown(path) {
-    fetch(path)
+    fetch(new URL(path, window.location.origin + basePath))
       .then(res => res.text())
       .then(md => {
         contentDiv.innerHTML = marked.parse(md);
@@ -527,7 +525,8 @@
 
   function addCopyButtons() {
     const codeBlocks = document.querySelectorAll('pre');
-    codeBlocks.forEach((block, index) => {
+    codeBlocks.forEach((block) => {
+      if (block.querySelector('.copy-button')) return; // tránh thêm nút trùng
       const copyButton = document.createElement('button');
       copyButton.textContent = 'Copy';
       copyButton.className = 'copy-button';
@@ -547,6 +546,7 @@
     });
   }
 </script>
+
 
 </body>
 </html>

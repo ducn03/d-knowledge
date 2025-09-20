@@ -435,12 +435,14 @@ int wrong_factorial(int n) {
 ❌ **d) `array a[3][3];`** - Không phải C++ (có thể là ngôn ngữ khác)
 
 **💻 Các cách khai báo mảng 2 chiều:**
+{% raw %}
 ```cpp
 int a[3][4];                    // 3 hàng, 4 cột
 int b[3][4] = {0};             // Khởi tạo tất cả = 0
 int c[2][3] = {{1,2,3}, {4,5,6}}; // Khởi tạo có giá trị
 int d[][3] = {{1,2,3}, {4,5,6}};   // Tự động xác định số hàng
 ```
+{% endraw %}
 
 ---
 

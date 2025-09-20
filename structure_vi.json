@@ -27,5 +27,18 @@
             }
         }
     }
+  },
+  "Đại học": {
+    "UIT": {
+      "nhập môn lập trình" : {
+        "Đề cương": {
+          "OT_00": "university/uit/nmlt/outline/outline1.md",
+          "OT_01": "university/uit/nmlt/outline/outline2.md",
+          "OT_02": "university/uit/nmlt/outline/outline3.md",
+          "OT_03": "university/uit/nmlt/outline/outline4.md",
+          "OT_04": "university/uit/nmlt/outline/outline5.md"
+        }
+      }
+    }
   }
 }

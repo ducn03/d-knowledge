@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Knowledge Base</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -495,25 +496,29 @@
 
   let structureData = {};
 
-  fetch(getFileUrl('structure_vi.json'))
-    .then(res => {
-      if (!res.ok) throw new Error(`Không tải được structure_vi.json: ${res.statusText}`);
-      return res.json();
-    })
-    .then(data => {
-      structureData = data;
-      const menu = buildMenu(data);
-      menu.classList.add('submenu', 'open');
-      menuDiv.appendChild(menu);
+  fetch(getFileUrl('structure_vi.json'), {
+  headers: {
+    'Accept': 'application/json; charset=utf-8'
+  }
+})
+  .then(res => {
+    if (!res.ok) throw new Error(`Không tải được structure_vi.json: ${res.statusText}`);
+    return res.json();
+  })
+  .then(data => {
+    structureData = data;
+    const menu = buildMenu(data);
+    menu.classList.add('submenu', 'open');
+    menuDiv.appendChild(menu);
 
-      const path = getQueryParam('path') || 'intro.md';
-      loadMarkdown(path);
-      activateMenuItem(path);
-    })
-    .catch(err => {
-      console.error('Lỗi khi tải structure_vi.json:', err);
-      contentDiv.innerHTML = `<p style="color:red">Lỗi tải cấu trúc menu: ${err.message}</p>`;
-    });
+    const path = getQueryParam('path') || 'intro.md';
+    loadMarkdown(path);
+    activateMenuItem(path);
+  })
+  .catch(err => {
+    console.error('Lỗi khi tải structure_vi.json:', err);
+    contentDiv.innerHTML = `<p style="color:red">Lỗi tải cấu trúc menu: ${err.message}</p>`;
+  });
 
   function buildMenu(obj) {
     const ul = document.createElement('ul');

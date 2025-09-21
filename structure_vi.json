@@ -44,7 +44,8 @@
         "Ôn tập": "university/uit/dstt/ontap/ontap.md"
       },
       "Giải tích": {
-        "ôn tập": "university/uit/gt/ontap/ontap.md"
+        "ôn tập": "university/uit/gt/ontap/ontap.md",
+        "ôn tập 2": "university/uit/gt/ontap/ontap2.md"
       }
     }
   }

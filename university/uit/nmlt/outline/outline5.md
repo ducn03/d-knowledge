@@ -1,48 +1,58 @@
 # Giải Đề Thi OT_04 - Lập Trình C++
 
-## Câu 1: Các phương pháp biểu diễn thuật toán (0.5 điểm)
+#### **Câu 1: Các phương pháp biểu diễn thuật toán (0.5 điểm)**
 
-Có 3 phương pháp chính để biểu diễn thuật toán:
+Có 3 phương pháp chính để biểu diễn một thuật toán:
 
-1. **Ngôn ngữ tự nhiên**: Mô tả thuật toán bằng lời văn, dễ hiểu nhưng có thể gây nhập nhằng.
+1.  **Dùng ngôn ngữ tự nhiên**:
+    *   **Mô tả**: Sử dụng ngôn ngữ thường ngày để liệt kê các bước của thuật toán. Phương pháp này không yêu cầu người đọc hay người viết phải nắm các quy tắc cụ thể.
+    *   **Nhược điểm**: Thường dài dòng, không thể hiện rõ cấu trúc của thuật toán và đôi lúc có thể gây khó hiểu hoặc hiểu lầm cho người đọc.
 
-2. **Lưu đồ (Flowchart)**: Sử dụng các ký hiệu hình học để biểu diễn các bước thực hiện thuật toán một cách trực quan.
+2.  **Dùng lưu đồ (Flowchart) - Sơ đồ khối**:
+    *   **Mô tả**: Là một công cụ trực quan sử dụng các ký hiệu đồ họa để diễn đạt thuật toán.
+    *   **Ưu điểm**: Giúp người đọc theo dõi được sự phân cấp các trường hợp và quá trình xử lý, đặc biệt hữu ích với các thuật toán có tính rắc rối, khó theo dõi.
 
-3. **Mã giả (Pseudocode)**: Kết hợp giữa ngôn ngữ tự nhiên và cú pháp lập trình, rõ ràng và dễ chuyển đổi thành code.
+3.  **Dùng mã giả (Pseudocode)**:
+    *   **Mô tả**: Là một ngôn ngữ tựa ngôn ngữ lập trình, sử dụng các cấu trúc chuẩn hóa (tựa Pascal, C), ký hiệu toán học, biến và hàm để mô tả thuật toán.
+    *   **Ưu điểm**: Đỡ cồng kềnh hơn so với lưu đồ khối.
+    *   **Nhược điểm**: Không trực quan bằng lưu đồ khối.
 
-## Câu 2: Ngôn ngữ lập trình là gì? (0.5 điểm)
+---
 
-**Ngôn ngữ lập trình** là một hệ thống ký hiệu được sử dụng để viết các chương trình máy tính. Nó bao gồm:
+#### **Câu 2: Ngôn ngữ lập trình là gì? (0.5 điểm)**
 
-- **Cú pháp (Syntax)**: Các quy tắc về cách viết code
-- **Ngữ nghĩa (Semantics)**: Ý nghĩa của các lệnh
-- **Từ vựng**: Tập hợp các từ khóa, toán tử, và ký hiệu
+Dựa trên các tài liệu, **ngôn ngữ lập trình C++** được cấu thành từ một **bộ từ vựng** riêng, giúp lập trình viên viết ra các chỉ dẫn để máy tính có thể thực thi. Bộ từ vựng này bao gồm các thành phần chính sau:
 
-Ngôn ngữ lập trình giúp lập trình viên giao tiếp với máy tính để tạo ra các ứng dụng phần mềm.
+*   **Ký tự**: Gồm bộ chữ cái Latin (A-Z, a-z), bộ chữ số thập phân (0-9), các ký hiệu toán học và các ký tự đặc biệt.
+*   **Từ khóa (Keywords)**: Là những từ dành riêng cho ngôn ngữ C++, được viết bằng chữ thường và không thể dùng để đặt tên biến hay hàm (ví dụ: `const`, `int`, `float`, `if`, `for`).
+*   **Tên/Định danh (Identifier)**: Là một dãy ký tự dùng để chỉ tên hằng, biến, hàm do người lập trình đặt. Tên phải tuân theo các quy tắc như: không trùng từ khóa, ký tự đầu tiên phải là chữ cái hoặc dấu gạch dưới `_`.
+*   **Hằng**: Gồm hằng ký tự (ví dụ: `'A'`) và hằng chuỗi (ví dụ: `"Xin Chao"`).
+*   **Dấu chấm phẩy (`;`)**: Dùng để phân cách và kết thúc các câu lệnh.
+*   **Câu chú thích (Comments)**: Là các ghi chú trong mã nguồn (`//` hoặc `/* */`) mà trình biên dịch sẽ bỏ qua, giúp người đọc dễ hiểu code hơn.
 
-## Câu 3: Lợi ích của việc sử dụng hàm (0.5 điểm)
+---
 
-Việc sử dụng hàm mang lại nhiều lợi ích:
+#### **Câu 3: Lợi ích của việc sử dụng hàm (0.5 điểm)**
 
-1. **Tái sử dụng code**: Viết một lần, sử dụng nhiều lần
-2. **Dễ bảo trì**: Chỉ cần sửa ở một chỗ khi có lỗi
-3. **Cấu trúc rõ ràng**: Chia nhỏ chương trình thành các phần độc lập
-4. **Giảm lỗi**: Tránh việc viết lại code nhiều lần
-5. **Dễ debug**: Kiểm tra từng phần riêng biệt
-6. **Làm việc nhóm**: Nhiều người có thể làm việc trên các hàm khác nhau
+Sử dụng hàm trong lập trình mang lại nhiều lợi ích quan trọng, vì hàm là một đoạn chương trình có tên, có đầu vào, đầu ra và thực hiện một chức năng chuyên biệt. Các lợi ích chính bao gồm:
 
-## Câu 4: Khái niệm về Biến trong C/C++ (0.5 điểm)
+1.  **Tái sử dụng (Reusability)**: Một hàm có thể được viết một lần và được gọi để sử dụng nhiều lần từ nhiều nơi khác nhau trong chương trình với các đối số khác nhau, tránh việc lặp lại code.
+2.  **Dễ sửa lỗi và cải tiến**: Khi cần thay đổi hoặc sửa lỗi một chức năng nào đó, ta chỉ cần chỉnh sửa trong thân hàm đó mà không ảnh hưởng đến các phần khác của chương trình.
+3.  **Cấu trúc rõ ràng**: Việc chia chương trình lớn thành các hàm nhỏ giúp mã nguồn trở nên có cấu trúc, dễ đọc và dễ quản lý hơn.
 
-**Biến** trong C/C++ là:
+---
 
-- Một vùng nhớ được đặt tên để lưu trữ dữ liệu
-- Có **kiểu dữ liệu** xác định (int, float, char, ...)
-- Có **tên biến** tuân theo quy tắc đặt tên
-- Có **giá trị** có thể thay đổi trong quá trình thực thi
+#### **Câu 4: Khái niệm về Biến trong C/C++ (0.5 điểm)**
 
-**Cú pháp khai báo**: `kiểu_dữ_liệu tên_biến = giá_trị_khởi_tạo;`
+**Biến (Variable)** trong C/C++ được định nghĩa là một ô nhớ hoặc một vùng nhớ dùng để chứa dữ liệu trong quá trình thực hiện chương trình. Các đặc điểm chính của biến bao gồm:
 
-**Ví dụ**: `int x = 10;`, `float pi = 3.14;`
+*   **Lưu trữ dữ liệu**: Mỗi biến được cấp một vùng nhớ với địa chỉ duy nhất để lưu trữ giá trị.
+*   **Có kiểu dữ liệu cụ thể**: Mỗi biến phải thuộc một kiểu dữ liệu xác định (ví dụ: `int`, `float`, `char`), và kích thước của biến phụ thuộc vào kiểu dữ liệu đó.
+*   **Có tên định danh**: Tên biến phải tuân theo quy tắc đặt tên của C++ (không trùng từ khóa, bắt đầu bằng chữ cái hoặc `_`, không chứa khoảng trắng).
+*   **Giá trị có thể thay đổi**: Giá trị được lưu trong biến có thể được thay đổi trong suốt quá trình chạy chương trình.
+
+**Cú pháp khai báo**: `kiểu_dữ_liệu tên_biến;` hoặc `kiểu_dữ_liệu tên_biến = giá_trị;`.
+**Ví dụ**: `int so_nguyen;` hoặc `float diem_trung_binh = 8.5;`.
 
 ## Câu 5: Lưu đồ tính tổng các số nguyên dương chẵn từ 1 đến n (0.5 điểm)
 

@@ -42,6 +42,9 @@
       },
       "Đại số tuyến tính" : {
         "Ôn tập": "university/uit/dstt/ontap/ontap.md"
+      },
+      "Giải tích": {
+        "ôn tập": "university/uit/gt/ontap/ontap.md"
       }
     }
   }

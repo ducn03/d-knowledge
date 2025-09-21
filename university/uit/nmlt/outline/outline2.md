@@ -1,227 +1,109 @@
-# GIẢI ĐỀ THI LẬP TRÌNH C++
 
-## CÂU 1: Thuật toán và Lưu đồ (1.0 điểm)
-
-### a) Thuật toán là gì?
-
-**Thuật toán** là một tập hợp hữu hạn các bước thực hiện được xác định rõ ràng để giải quyết một bài toán cụ thể hoặc thực hiện một công việc nào đó.
-
-**Đặc điểm của thuật toán:**
-- **Tính hữu hạn**: Thuật toán phải kết thúc sau một số bước hữu hạn
-- **Tính xác định**: Mỗi bước phải được mô tả rõ ràng, không gây nhập nhằng
-- **Có đầu vào**: Có thể có 0 hoặc nhiều đầu vào
-- **Có đầu ra**: Có ít nhất 1 đầu ra
-- **Tính hiệu quả**: Mỗi bước phải đơn giản và có thể thực hiện được
-
-### b) Lưu đồ là gì? Vẽ lưu đồ tính tổng các số lẻ từ 1 đến n
-
-**Lưu đồ (Flowchart)** là một biểu đồ sử dụng các ký hiệu đồ họa để mô tả trình tự các bước thực hiện của thuật toán.
-
-**Các ký hiệu cơ bản:**
-- Hình oval: Bắt đầu/Kết thúc
-- Hình chữ nhật: Xử lý/Tính toán
-- Hình thoi: Điều kiện/Quyết định
-- Hình bình hành: Nhập/Xuất dữ liệu
-
-**Lưu đồ tính tổng các số lẻ từ 1 đến n:**
-
-```
-        [Bắt đầu]
-             |
-        [Nhập n]
-             |
-        [sum = 0]
-        [i = 1]
-             |
-        <i <= n?>
-         /      \
-      Không     Có
-        |        |
-        |    <i % 2 == 1?>
-        |      /        \
-        |   Không      Có
-        |     |         |
-        |     |    [sum = sum + i]
-        |     |         |
-        |    [i = i + 2] |
-        |     |         |
-        |     \_________/
-        |        |
-        |   [Quay về điều kiện i <= n]
-        |
-    [In sum]
-        |
-    [Kết thúc]
-```
+### **GIẢI ĐỀ THI LẬP TRÌNH C++ OT_001**
 
 ---
 
-## CÂU 2: Biến trong C/C++ (1.0 điểm)
+#### **CÂU 1: Thuật toán và Lưu đồ (1.0 điểm)**
 
-### a) Khái niệm về biến và sự khác nhau giữa biến cục bộ và biến toàn cục
+##### a) Thuật toán là gì? Đặc trưng cơ bản
 
-**Biến** là một vùng nhớ được đặt tên để lưu trữ dữ liệu, có thể thay đổi giá trị trong quá trình thực hiện chương trình.
+**Thuật toán (Algorithm)** là một tập hợp (dãy) hữu hạn các chỉ thị (hành động) được định nghĩa rõ ràng nhằm giải quyết một bài toán cụ thể. Nói cách khác, thuật toán là một dãy hữu hạn các thao tác được sắp xếp theo một trình tự xác định, sao cho sau khi thực hiện dãy thao tác đó, từ **Input** của bài toán, ta sẽ nhận được **Output** cần tìm.
 
-**So sánh biến cục bộ và biến toàn cục:**
+**Các tiêu chuẩn (đặc trưng) của thuật toán:**
+Dựa trên tài liệu môn học, một thuật toán cần đảm bảo các tiêu chuẩn sau:
 
-| Tiêu chí | Biến cục bộ | Biến toàn cục |
-|----------|-------------|---------------|
-| **Phạm vi** | Chỉ trong hàm/khối lệnh khai báo | Toàn bộ chương trình |
-| **Vị trí khai báo** | Bên trong hàm/khối lệnh | Bên ngoài tất cả hàm |
-| **Thời gian tồn tại** | Khi vào hàm tạo, ra khỏi hàm hủy | Suốt quá trình chạy chương trình |
-| **Bộ nhớ** | Stack | Data segment |
-| **Khởi tạo mặc định** | Không được khởi tạo | Được khởi tạo = 0 |
+*   **Tính chính xác/đúng**: Quá trình tính toán phải chính xác và khi kết thúc, thuật toán phải cung cấp kết quả đúng đắn.
+*   **Tính phổ dụng/tổng quát**: Thuật toán phải có khả năng áp dụng cho cả một lớp các bài toán có đầu vào tương tự nhau, không chỉ giải quyết một trường hợp riêng lẻ.
+*   **Tính khách quan/xác định**: Với cùng một điều kiện đầu vào, thuật toán phải luôn cho ra kết quả như nhau, dù được viết bởi nhiều người khác nhau.
+*   **Tính kết thúc/hữu hạn**: Thuật toán bắt buộc phải dừng lại sau một số bước thực hiện hữu hạn.
+*   **Tính rõ ràng/hiệu quả**: Các câu lệnh trong thuật toán phải minh bạch và được sắp xếp theo một thứ tự nhất định.
 
-### b) Giá trị biến khi không khởi tạo và tại sao cần khởi tạo
+##### b) Lưu đồ là gì?
 
-**Khi khai báo biến mà không khởi tạo:**
-- **Biến cục bộ**: Chứa giá trị rác (garbage value) - không xác định
-- **Biến toàn cục**: Được tự động khởi tạo = 0
+**Lưu đồ (Flowchart)** là một công cụ trực quan sử dụng các ký hiệu đồ họa để diễn đạt các thuật toán. Việc biểu diễn thuật toán bằng lưu đồ giúp người đọc theo dõi được sự phân cấp các trường hợp và quá trình xử lý, đặc biệt hữu ích với các thuật toán phức tạp.
 
-**Tại sao cần khởi tạo biến:**
-- Tránh lỗi logic do giá trị rác không mong muốn
-- Đảm bảo chương trình hoạt động đúng như mong đợi
-- Tăng tính ổn định và dễ debug
-- Tuân thủ nguyên tắc lập trình tốt
+**Các ký hiệu cơ bản**:
+*   **Hình oval**: Bắt đầu/Kết thúc.
+*   **Hình chữ nhật**: Xử lý/Tính toán.
+*   **Hình thoi**: Điều kiện/Quyết định.
+*   **Hình bình hành**: Nhập/Xuất dữ liệu.
 
 ---
 
-## CÂU 3: Hàm trong C++ (1.0 điểm)
+#### **CÂU 2: Biến trong C/C++ (1.0 điểm)**
 
-### a) Cấu trúc khai báo và định nghĩa hàm
+##### a) Khái niệm về biến và sự khác nhau giữa biến cục bộ và biến toàn cục
 
-**Cấu trúc khai báo hàm:**
-```cpp
-kiểu_trả_về tên_hàm(danh_sách_tham_số);
-```
+**Biến (Variable)** là một ô nhớ hoặc một vùng nhớ được đặt tên dùng để chứa dữ liệu trong quá trình thực hiện chương trình. Giá trị của biến có thể được thay đổi.
 
-**Cấu trúc định nghĩa hàm:**
-```cpp
-kiểu_trả_về tên_hàm(danh_sách_tham_số)
-{
-    // Thân hàm
-    // Các câu lệnh
-    return giá_trị; // (nếu hàm có kiểu trả về khác void)
-}
-```
+**So sánh biến cục bộ và biến toàn cục**:
 
-**Ví dụ:**
-```cpp
-// Khai báo
-int tinhTong(int a, int b);
+| Tiêu chí | Biến cục bộ (Local Variable) | Biến toàn cục (Global Variable) |
+| :--- | :--- | :--- |
+| **Vị trí khai báo** | Bên trong một hàm hoặc một khối lệnh `{}`. | Bên ngoài tất cả các hàm, thường ở đầu file. |
+| **Phạm vi (Scope)** | Chỉ có tác dụng bên trong khối lệnh chứa nó. | Toàn bộ chương trình. |
+| **Thời gian tồn tại** | Được tạo ra khi vào khối lệnh và bị hủy khi ra khỏi khối lệnh đó. | Tồn tại suốt quá trình chạy chương trình. |
+| **Khởi tạo mặc định**| **Không được tự động khởi tạo**, chứa giá trị rác (garbage value). | **Được tự động khởi tạo** bằng 0 hoặc giá trị tương đương (số là 0, char là `\0`, con trỏ là `NULL`). |
 
-// Định nghĩa
-int tinhTong(int a, int b)
-{
-    int tong = a + b;
-    return tong;
-}
-```
+##### b) Giá trị biến khi không khởi tạo và tại sao cần khởi tạo
 
-### b) Kiểu dữ liệu hàm có thể trả về
-
-**Hàm có thể trả về các kiểu:**
-- **Kiểu cơ bản**: int, float, double, char, bool
-- **void**: Không trả về giá trị
-- **Kiểu con trỏ**: int*, char*, float*
-- **Kiểu cấu trúc**: struct, class
-- **Kiểu tham chiếu**: int&, float&
-
-**Ví dụ minh họa:**
-```cpp
-// Trả về int
-int timMax(int a, int b) {
-    return (a > b) ? a : b;
-}
-
-// Trả về void
-void inThongTin() {
-    cout << "Hello World!";
-}
-
-// Trả về con trỏ
-int* taoMang(int n) {
-    return new int[n];
-}
-
-// Trả về cấu trúc
-struct Point {
-    int x, y;
-};
-
-Point taoPoint(int x, int y) {
-    Point p;
-    p.x = x;
-    p.y = y;
-    return p;
-}
-```
+*   **Khi khai báo biến mà không khởi tạo:**
+    *   **Biến cục bộ**: Chứa **giá trị rác (garbage value)**, là một giá trị không xác định.
+    *   **Biến toàn cục**: Được hệ thống **tự động khởi tạo** bằng giá trị 0 (đối với kiểu số), `\0` (đối với kiểu ký tự), hoặc `NULL` (đối với con trỏ).
+*   **Tại sao cần khởi tạo biến (đặc biệt là biến cục bộ):**
+    *   Để tránh các lỗi logic khó lường do sử dụng giá trị rác không mong muốn.
+    *   Để đảm bảo chương trình hoạt động đúng như dự kiến và tăng tính ổn định.
 
 ---
 
-## CÂU 4: Đệ quy (1.0 điểm)
+#### **CÂU 3: Hàm trong C++ (1.0 điểm)**
 
-### a) Đệ quy là gì? So sánh đệ quy và vòng lặp
+##### a) Cấu trúc khai báo và định nghĩa hàm
 
-**Đệ quy** là kỹ thuật lập trình trong đó một hàm gọi chính nó để giải quyết bài toán con nhỏ hơn.
+**Cấu trúc định nghĩa một hàm** bao gồm các thành phần sau:
 
-**Cấu trúc đệ quy:**
-- **Điều kiện dừng (base case)**: Trường hợp đơn giản nhất
-- **Bước đệ quy**: Hàm gọi chính nó với tham số khác
+```cpp
+kiểu_trả_về tên_hàm([danh sách tham số]) {
+    <các câu lệnh>
+    return <giá_trị_trả_về>;
+}
+```
+
+*   **`kiểu_trả_về` (Return type)**: Là bất kỳ kiểu dữ liệu nào của C++. Nếu hàm không trả về giá trị thì kiểu là `void`.
+*   **`tên_hàm` (Function name)**: Đặt theo quy tắc đặt tên biến.
+*   **`danh sách tham số` (Parameter list)**: Khai báo các biến mà hàm nhận vào, giống như khai báo biến thông thường và cách nhau bởi dấu phẩy.
+*   **`return <giá_trị_trả_về>`**: Dùng để trả về kết quả đầu ra của hàm. Lệnh `return` cũng sẽ kết thúc việc thực thi của hàm.
+
+##### b) Kiểu dữ liệu hàm có thể trả về
+
+Hàm trong C++ có thể trả về nhiều loại kiểu dữ liệu khác nhau:
+
+*   **Các kiểu dữ liệu cơ bản**: `int`, `float`, `double`, `char`, `bool`.
+*   **Kiểu `void`**: Dùng khi hàm không cần trả về giá trị nào.
+*   **Kiểu con trỏ**: `int*`, `char*`,... Hàm có thể trả về một địa chỉ bộ nhớ.
+*   **Kiểu cấu trúc (`struct`)**: Hàm có thể trả về một đối tượng có kiểu dữ liệu do người dùng định nghĩa.
+*   **Kiểu tham chiếu (`&`)**: `int&`, `float&`,... Hàm trả về một tham chiếu đến một biến, cho phép thay đổi giá trị của biến đó từ bên ngoài.
+
+---
+
+#### **CÂU 4: Đệ quy (1.0 điểm)**
+
+##### a) Đệ quy là gì? So sánh đệ quy và vòng lặp
+
+**Đệ quy (Recursion)** là một kỹ thuật lập trình trong đó một vấn đề được giải quyết thông qua kết quả của chính vấn đề đó nhưng với đầu vào đơn giản hơn. Trong C++, điều này được thực hiện bằng một hàm gọi lại chính nó trong thân hàm.
+
+**Cấu trúc hàm đệ quy:**
+*   **Trường hợp cơ sở (Base case)**: Một điều kiện dừng, là một input đủ nhỏ để có thể giải quyết mà không cần gọi đệ quy thêm nữa.
+*   **Lời gọi đệ quy (Recursive step)**: Hàm gọi lại chính nó với đầu vào được thu nhỏ lại, tiến gần hơn đến trường hợp cơ sở.
 
 **So sánh đệ quy và vòng lặp:**
 
 | Tiêu chí | Đệ quy | Vòng lặp |
-|----------|---------|----------|
-| **Dễ hiểu** | Trực quan với bài toán có cấu trúc đệ quy | Dễ hiểu hơn với người mới |
-| **Bộ nhớ** | Tiêu tốn nhiều (do stack) | Tiêu tốn ít |
-| **Tốc độ** | Chậm hơn (overhead gọi hàm) | Nhanh hơn |
-| **Ngăn xếp** | Có thể bị tràn stack | Không có vấn đề này |
-| **Độ phức tạp code** | Ngắn gọn, elegant | Có thể dài hơn |
-
-### b) Ví dụ minh họa
-
-**Tính giai thừa n!:**
-
-```cpp
-// Đệ quy
-int giaiThua_DeQuy(int n) {
-    if (n <= 1)  // Điều kiện dừng
-        return 1;
-    return n * giaiThua_DeQuy(n - 1);  // Bước đệ quy
-}
-
-// Vòng lặp
-int giaiThua_VongLap(int n) {
-    int ketQua = 1;
-    for (int i = 1; i <= n; i++) {
-        ketQua *= i;
-    }
-    return ketQua;
-}
-```
-
-**Dãy Fibonacci:**
-```cpp
-// Đệ quy
-int fibonacci_DeQuy(int n) {
-    if (n <= 1)
-        return n;
-    return fibonacci_DeQuy(n-1) + fibonacci_DeQuy(n-2);
-}
-
-// Vòng lặp
-int fibonacci_VongLap(int n) {
-    if (n <= 1) return n;
-    int a = 0, b = 1, c;
-    for (int i = 2; i <= n; i++) {
-        c = a + b;
-        a = b;
-        b = c;
-    }
-    return b;
-}
-```
+| :--- | :--- | :--- |
+| **Độ phức tạp code** | Ngắn gọn, trực quan với các bài toán có bản chất đệ quy. | Có thể dài hơn nhưng thường dễ theo dõi với người mới. |
+| **Tốc độ thực thi** | Thường **chậm hơn** do chi phí cho các lời gọi hàm (function call overhead). | Thường **nhanh hơn**. |
+| **Bộ nhớ sử dụng** | **Tốn nhiều bộ nhớ hơn** do sử dụng **Call Stack** để lưu trạng thái của mỗi lần gọi hàm. | Tốn ít bộ nhớ hơn. |
+| **Nguy cơ lỗi** | Có nguy cơ bị **tràn bộ nhớ stack (stack overflow)** nếu lời gọi đệ quy quá sâu. | Không có vấn đề này. |
 
 ---
 
